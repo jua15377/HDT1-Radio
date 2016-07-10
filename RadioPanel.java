@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 /**
  * Esta clase contiene los siguientes componentes:
@@ -12,6 +14,9 @@ import java.awt.event.ActionListener;
 public class RadioPanel extends JPanel {
     private JPanel radioPanel;
     private Radio radio = new Radio();
+    private JLabel actualFrec;
+    DecimalFormat aprox = new DecimalFormat("#.#"); //Para eliminar ceros inecesarios
+
 
     public RadioPanel(){
         radioPanel = new JPanel();
@@ -19,17 +24,21 @@ public class RadioPanel extends JPanel {
         radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.X_AXIS));
 
         //Botones
-        JButton encendido = new JButton("ON/OFF");
+        JButton encendido = new JButton("OFF");
         EnciendeRadio enciendeRadio = new EnciendeRadio();
         encendido.addActionListener(enciendeRadio);
 
-        JButton am = new JButton("AM");
-
         JButton fm = new JButton("FM");
+        CambiaFrecuencia cambiaFrecuencia = new CambiaFrecuencia();
+        fm.addActionListener(cambiaFrecuencia);
 
         JButton aumentarFrec = new JButton(">");
+        AumentaEmisora aumentaEmisora = new AumentaEmisora();
+        aumentarFrec.addActionListener(aumentaEmisora);
 
         JButton disminuirFrec = new JButton("<");
+        DisminuyeEmisora disminuyeEmisora = new DisminuyeEmisora();
+        disminuirFrec.addActionListener(disminuyeEmisora);
 
         JButton f1 = new JButton("1");
         JButton f2 = new JButton("2");
@@ -45,7 +54,7 @@ public class RadioPanel extends JPanel {
         JButton f11 = new JButton("11");
         JButton f12 = new JButton("12");
 
-        JLabel actualFrec = new JLabel("87.9");
+        actualFrec = new JLabel("OFF");
 
         //Agregado de componentes a GUI
         radioPanel.add(encendido);
@@ -87,7 +96,6 @@ public class RadioPanel extends JPanel {
 
             //Agregar botones am y fm a una Box
             Box botonesDerecha = Box.createVerticalBox();
-            botonesDerecha.add(am);
             botonesDerecha.add(fm);
 
         radioPanel.add(botonesDerecha);
@@ -102,11 +110,87 @@ public class RadioPanel extends JPanel {
             if (estado){
                 ((JButton) e.getSource()).setText("OFF");
                 radio.setEncendido(false);
+                setActualFrec("OFF");
             }
             else {
                 ((JButton) e.getSource()).setText("ON");
                 radio.setEncendido(true);
+                setActualFrec(String.valueOf((radio.getEmisora())));
+
             }
         }
+    }
+
+    private class CambiaFrecuencia implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean frecuencia = radio.getFrecuencia();
+            if (frecuencia){
+                ((JButton) e.getSource()).setText("AM");
+                radio.setFrecuencia(false);
+                radio.setEmisora(530.0);
+                setActualFrec("530.0");
+
+            }
+            else {
+                ((JButton) e.getSource()).setText("FM");
+                radio.setFrecuencia(true);
+                radio.setEmisora(87.9);
+                setActualFrec("87.9");
+            }
+        }
+    }
+
+    private class AumentaEmisora implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean tipoFrecuencia = radio.getFrecuencia();
+            double aumento, emiNueva;
+
+            //Se el tipo de aumento, segun el tipo de frecuencia
+            if (tipoFrecuencia){
+                aumento = 0.2;
+            } else {
+                aumento = 10;
+            }
+
+            emiNueva = radio.getEmisora() + aumento;
+            emiNueva = Double.parseDouble(aprox.format(emiNueva));
+
+            radio.setEmisora(emiNueva);
+            setActualFrec(String.valueOf(emiNueva));
+
+
+        }
+    }
+
+    private class DisminuyeEmisora implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean tipoFrecuencia = radio.getFrecuencia();
+            double aumento, emiNueva;
+
+            //Se el tipo de aumento, segun el tipo de frecuencia
+            if (tipoFrecuencia){
+                aumento = -0.2;
+            } else {
+                aumento = -10;
+            }
+
+            emiNueva = radio.getEmisora() + aumento;
+            emiNueva = Double.parseDouble(aprox.format(emiNueva));
+
+            radio.setEmisora(emiNueva);
+            setActualFrec(String.valueOf(emiNueva));
+        }
+    }
+
+    //Setters
+    public String getActualFrec() {
+        return actualFrec.getText();
+    }
+
+    public void setActualFrec(String actualFrec) {
+        this.actualFrec.setText(actualFrec);
     }
 }
