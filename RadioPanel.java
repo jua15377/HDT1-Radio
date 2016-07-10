@@ -27,9 +27,9 @@ public class RadioPanel extends JPanel {
 
         JButton fm = new JButton("FM");
 
-        JButton aumentarFrec = new JButton("->");
+        JButton aumentarFrec = new JButton(">");
 
-        JButton disminuirFrec = new JButton("<-");
+        JButton disminuirFrec = new JButton("<");
 
         JButton f1 = new JButton("1");
         JButton f2 = new JButton("2");
@@ -98,7 +98,15 @@ public class RadioPanel extends JPanel {
     public class EnciendeRadio implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            boolean estado = radio.getEncendido();
+            if (estado){
+                ((JButton) e.getSource()).setText("OFF");
+                radio.setEncendido(false);
+            }
+            else {
+                ((JButton) e.getSource()).setText("ON");
+                radio.setEncendido(true);
+            }
         }
     }
 }

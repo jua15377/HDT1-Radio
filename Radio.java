@@ -5,45 +5,55 @@
  * @version 1.0
  */
 public class Radio implements RadioInterface{
-    public Radio(){}
+    //Atributos
+    private boolean encendido, frecuencia;
+    private double emisora;
+    private double[] frecsGuardadas = {87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9};
+
+    //Metodos
+    public Radio(){
+        this.encendido = false;
+        this.frecuencia = true;
+        this.emisora = 87.9;
+    }
 
     @Override
     public void setEncendido(boolean estado) {
-
+        this.encendido = estado;
     }
 
     @Override
     public void setFrecuencia(boolean frecuencia) {
-
+        this.frecuencia = frecuencia;
     }
 
     @Override
     public void setEmisora(double emisora) {
-
+        this.emisora = emisora;
     }
 
     @Override
     public void saveEmisora(int btn, double emisora) {
-
+        this.frecsGuardadas[btn-1] = emisora;
     }
 
     @Override
     public double selectEmisora(int btn) {
-        return 0;
+        return this.frecsGuardadas[btn];
     }
 
     @Override
     public boolean getEncendido() {
-        return false;
+        return this.encendido;
     }
 
     @Override
     public boolean getFrecuencia() {
-        return false;
+        return this.frecuencia;
     }
 
     @Override
     public double getEmisora() {
-        return 0;
+        return this.emisora;
     }
 }
