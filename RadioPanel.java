@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +17,13 @@ public class RadioPanel extends JPanel {
     private JPanel radioPanel;
     private Radio radio = new Radio();
     private JLabel actualFrec;
+    private JButton f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,fm, aumentarFrec, disminuirFrec;
+
+
+    private int contadorSegundos;
+
+    private int actualButton;
+    private Timer timerEstaciones;
     DecimalFormat aprox = new DecimalFormat("#.#"); //Para eliminar ceros inecesarios
 
 
@@ -28,31 +37,59 @@ public class RadioPanel extends JPanel {
         EnciendeRadio enciendeRadio = new EnciendeRadio();
         encendido.addActionListener(enciendeRadio);
 
-        JButton fm = new JButton("FM");
+        fm = new JButton("FM");
         CambiaFrecuencia cambiaFrecuencia = new CambiaFrecuencia();
         fm.addActionListener(cambiaFrecuencia);
 
-        JButton aumentarFrec = new JButton(">");
+        aumentarFrec = new JButton(">");
         AumentaEmisora aumentaEmisora = new AumentaEmisora();
         aumentarFrec.addActionListener(aumentaEmisora);
 
-        JButton disminuirFrec = new JButton("<");
+
+        disminuirFrec = new JButton("<");
         DisminuyeEmisora disminuyeEmisora = new DisminuyeEmisora();
         disminuirFrec.addActionListener(disminuyeEmisora);
 
-        JButton f1 = new JButton("1");
-        JButton f2 = new JButton("2");
-        JButton f3 = new JButton("3");
-        JButton f4 = new JButton("4");
-        JButton f5 = new JButton("5");
-        JButton f6 = new JButton("6");
+        //Listener para estaciones guardadas
+        TimerListener timerListener = new TimerListener();
+        timerEstaciones = new Timer(500, timerListener);
+        EscuchaEmisoraGuardada escuchaEmisoraGuardada = new EscuchaEmisoraGuardada();
+        CambiaBotonActual cambiaBotonActual = new CambiaBotonActual();
 
-        JButton f7 = new JButton("7");
-        JButton f8 = new JButton("8");
-        JButton f9 = new JButton("9");
-        JButton f10 = new JButton("10");
-        JButton f11 = new JButton("11");
-        JButton f12 = new JButton("12");
+        f1 = new JButton("1");
+        f1.addActionListener(cambiaBotonActual);
+        ButtonModel bf1 = f1.getModel();
+        bf1.addChangeListener(escuchaEmisoraGuardada);
+
+        f2 = new JButton("2");
+        f3 = new JButton("3");
+        f4 = new JButton("4");
+        f5 = new JButton("5");
+        f6 = new JButton("6");
+
+        f7 = new JButton("7");
+        f8 = new JButton("8");
+        f9 = new JButton("9");
+        f10 = new JButton("10");
+        f11 = new JButton("11");
+        f12 = new JButton("12");
+
+        //Iniciar apagados
+        f1.setEnabled(false);
+        f2.setEnabled(false);
+        f3.setEnabled(false);
+        f4.setEnabled(false);
+        f5.setEnabled(false);
+        f6.setEnabled(false);
+        f7.setEnabled(false);
+        f8.setEnabled(false);
+        f9.setEnabled(false);
+        f10.setEnabled(false);
+        f11.setEnabled(false);
+        f12.setEnabled(false);
+        fm.setEnabled(false);
+        disminuirFrec.setEnabled(false);
+        aumentarFrec.setEnabled(false);
 
         actualFrec = new JLabel("OFF");
 
@@ -111,12 +148,41 @@ public class RadioPanel extends JPanel {
                 ((JButton) e.getSource()).setText("OFF");
                 radio.setEncendido(false);
                 setActualFrec("OFF");
+                f1.setEnabled(false);
+                f2.setEnabled(false);
+                f3.setEnabled(false);
+                f4.setEnabled(false);
+                f5.setEnabled(false);
+                f6.setEnabled(false);
+                f7.setEnabled(false);
+                f8.setEnabled(false);
+                f9.setEnabled(false);
+                f10.setEnabled(false);
+                f11.setEnabled(false);
+                f12.setEnabled(false);
+                fm.setEnabled(false);
+                disminuirFrec.setEnabled(false);
+                aumentarFrec.setEnabled(false);
             }
             else {
                 ((JButton) e.getSource()).setText("ON");
                 radio.setEncendido(true);
                 setActualFrec(String.valueOf((radio.getEmisora())));
-
+                f1.setEnabled(true);
+                f2.setEnabled(true);
+                f3.setEnabled(true);
+                f4.setEnabled(true);
+                f5.setEnabled(true);
+                f6.setEnabled(true);
+                f7.setEnabled(true);
+                f8.setEnabled(true);
+                f9.setEnabled(true);
+                f10.setEnabled(true);
+                f11.setEnabled(true);
+                f12.setEnabled(true);
+                fm.setEnabled(true);
+                disminuirFrec.setEnabled(true);
+                aumentarFrec.setEnabled(true);
             }
         }
     }
@@ -159,7 +225,7 @@ public class RadioPanel extends JPanel {
 
             radio.setEmisora(emiNueva);
             setActualFrec(String.valueOf(emiNueva));
-
+            setContadorSegundos(0);
 
         }
     }
@@ -182,6 +248,54 @@ public class RadioPanel extends JPanel {
 
             radio.setEmisora(emiNueva);
             setActualFrec(String.valueOf(emiNueva));
+            setContadorSegundos(0);
+        }
+
+
+    }
+
+    private class EscuchaEmisoraGuardada implements ChangeListener {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            ButtonModel source = ((ButtonModel) e.getSource());
+            int segundos;
+            // Mientras esta presionado un contador inicia
+            if (source.isPressed() && !timerEstaciones.isRunning()){
+                timerEstaciones.start();
+            } else if (!source.isPressed() && timerEstaciones.isRunning()){
+                timerEstaciones.stop();
+                segundos = getContadorSegundos();
+                if (segundos >= 3){
+                    //Guardar estacion actual en dicho boton
+                    double estacionActual = Double.parseDouble(getActualFrec());
+                    radio.saveEmisora(getActualButton(),estacionActual);
+                    JOptionPane.showMessageDialog(null, "Estacion guardada con exito!");
+
+                } else {
+                    //Cargar estacion guardada en boton
+                    double frecuencia = radio.selectEmisora(getActualButton());
+                    setActualFrec(String.valueOf(frecuencia));
+                    radio.setEmisora(frecuencia);
+                }
+            }
+        }
+    }
+
+    private class TimerListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int contador = getContadorSegundos();
+            setContadorSegundos(contador + 1);
+            System.out.println(contador); //Eliminar
+        }
+    }
+
+    private class CambiaBotonActual implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton source = (JButton) e.getSource();
+            int actual = Integer.parseInt(source.getText());
+            setActualButton(actual);
         }
     }
 
@@ -192,5 +306,21 @@ public class RadioPanel extends JPanel {
 
     public void setActualFrec(String actualFrec) {
         this.actualFrec.setText(actualFrec);
+    }
+
+    public int getContadorSegundos() {
+        return contadorSegundos;
+    }
+
+    public void setContadorSegundos(int contadorSegundos) {
+        this.contadorSegundos = contadorSegundos;
+    }
+
+    public int getActualButton() {
+        return actualButton;
+    }
+
+    public void setActualButton(int actualButton) {
+        this.actualButton = actualButton;
     }
 }

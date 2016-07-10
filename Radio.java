@@ -39,7 +39,7 @@ public class Radio implements RadioInterface{
 
     @Override
     public double selectEmisora(int btn) {
-        return this.frecsGuardadas[btn];
+        return this.frecsGuardadas[btn-1];
     }
 
     @Override
