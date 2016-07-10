@@ -62,17 +62,59 @@ public class RadioPanel extends JPanel {
         bf1.addChangeListener(escuchaEmisoraGuardada);
 
         f2 = new JButton("2");
+        f2.addActionListener(cambiaBotonActual);
+        ButtonModel bf2 = f2.getModel();
+        bf2.addChangeListener(escuchaEmisoraGuardada);
+
         f3 = new JButton("3");
+        f3.addActionListener(cambiaBotonActual);
+        ButtonModel bf3 = f3.getModel();
+        bf3.addChangeListener(escuchaEmisoraGuardada);
+
         f4 = new JButton("4");
+        f4.addActionListener(cambiaBotonActual);
+        ButtonModel bf4 = f4.getModel();
+        bf4.addChangeListener(escuchaEmisoraGuardada);
+
         f5 = new JButton("5");
+        f5.addActionListener(cambiaBotonActual);
+        ButtonModel bf5 = f5.getModel();
+        bf5.addChangeListener(escuchaEmisoraGuardada);
+
         f6 = new JButton("6");
+        f6.addActionListener(cambiaBotonActual);
+        ButtonModel bf6 = f6.getModel();
+        bf6.addChangeListener(escuchaEmisoraGuardada);
 
         f7 = new JButton("7");
+        f7.addActionListener(cambiaBotonActual);
+        ButtonModel bf7 = f7.getModel();
+        bf7.addChangeListener(escuchaEmisoraGuardada);
+
         f8 = new JButton("8");
+        f8.addActionListener(cambiaBotonActual);
+        ButtonModel bf8 = f8.getModel();
+        bf8.addChangeListener(escuchaEmisoraGuardada);
+
         f9 = new JButton("9");
+        f9.addActionListener(cambiaBotonActual);
+        ButtonModel bf9 = f9.getModel();
+        bf9.addChangeListener(escuchaEmisoraGuardada);
+
         f10 = new JButton("10");
+        f10.addActionListener(cambiaBotonActual);
+        ButtonModel bf10 = f10.getModel();
+        bf10.addChangeListener(escuchaEmisoraGuardada);
+
         f11 = new JButton("11");
+        f11.addActionListener(cambiaBotonActual);
+        ButtonModel bf11 = f11.getModel();
+        bf11.addChangeListener(escuchaEmisoraGuardada);
+
         f12 = new JButton("12");
+        f12.addActionListener(cambiaBotonActual);
+        ButtonModel bf12 = f12.getModel();
+        bf12.addChangeListener(escuchaEmisoraGuardada);
 
         //Iniciar apagados
         f1.setEnabled(false);
@@ -136,7 +178,7 @@ public class RadioPanel extends JPanel {
             botonesDerecha.add(fm);
 
         radioPanel.add(botonesDerecha);
-
+        JOptionPane.showMessageDialog(null, "Para guardar estación, dejar presionado boton por 3 segundos.");
         add(radioPanel);
     }
 
@@ -146,8 +188,8 @@ public class RadioPanel extends JPanel {
             boolean estado = radio.getEncendido();
             if (estado){
                 ((JButton) e.getSource()).setText("OFF");
+                actualFrec.setEnabled(false);
                 radio.setEncendido(false);
-                setActualFrec("OFF");
                 f1.setEnabled(false);
                 f2.setEnabled(false);
                 f3.setEnabled(false);
@@ -167,6 +209,7 @@ public class RadioPanel extends JPanel {
             else {
                 ((JButton) e.getSource()).setText("ON");
                 radio.setEncendido(true);
+                actualFrec.setEnabled(true);
                 setActualFrec(String.valueOf((radio.getEmisora())));
                 f1.setEnabled(true);
                 f2.setEnabled(true);
@@ -211,16 +254,23 @@ public class RadioPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             boolean tipoFrecuencia = radio.getFrecuencia();
-            double aumento, emiNueva;
+            double aumento, emiNueva, inicio, fin;
 
             //Se el tipo de aumento, segun el tipo de frecuencia
             if (tipoFrecuencia){
                 aumento = 0.2;
+                inicio = 87.9;
+                fin = 107.9;
             } else {
                 aumento = 10;
+                inicio = 530;
+                fin = 1610;
             }
 
             emiNueva = radio.getEmisora() + aumento;
+            if (emiNueva > fin){
+                emiNueva = inicio;
+            }
             emiNueva = Double.parseDouble(aprox.format(emiNueva));
 
             radio.setEmisora(emiNueva);
@@ -234,16 +284,23 @@ public class RadioPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             boolean tipoFrecuencia = radio.getFrecuencia();
-            double aumento, emiNueva;
+            double aumento, emiNueva, inicio, fin;
 
             //Se el tipo de aumento, segun el tipo de frecuencia
             if (tipoFrecuencia){
                 aumento = -0.2;
+                inicio = 87.9;
+                fin = 107.9;
             } else {
                 aumento = -10;
+                inicio = 530;
+                fin = 1610;
             }
 
             emiNueva = radio.getEmisora() + aumento;
+            if (emiNueva < inicio){
+                emiNueva = fin;
+            }
             emiNueva = Double.parseDouble(aprox.format(emiNueva));
 
             radio.setEmisora(emiNueva);
@@ -270,6 +327,7 @@ public class RadioPanel extends JPanel {
                     double estacionActual = Double.parseDouble(getActualFrec());
                     radio.saveEmisora(getActualButton(),estacionActual);
                     JOptionPane.showMessageDialog(null, "Estacion guardada con exito!");
+                    setContadorSegundos(0);
 
                 } else {
                     //Cargar estacion guardada en boton
@@ -286,7 +344,6 @@ public class RadioPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             int contador = getContadorSegundos();
             setContadorSegundos(contador + 1);
-            System.out.println(contador); //Eliminar
         }
     }
 
@@ -306,6 +363,14 @@ public class RadioPanel extends JPanel {
 
     public void setActualFrec(String actualFrec) {
         this.actualFrec.setText(actualFrec);
+        double actualFrec2 = Double.parseDouble(actualFrec);
+        if (actualFrec2 > 108){
+            radio.setFrecuencia(false);
+            fm.setText("AM");
+        } else {
+            radio.setFrecuencia(true);
+            fm.setText("FM");
+        }
     }
 
     public int getContadorSegundos() {
