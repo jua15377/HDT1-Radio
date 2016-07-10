@@ -3,7 +3,7 @@ import java.awt.*;
 
 /**
  * Esta clase arma la gui, llama al contenedor RadioPanel para mostrar en pantalla la aplicacion
- * @author Eric Mendoza 15002; Jonnathan Juarez 15377; Javier Jo
+ * @author Eric Mendoza 15002; Jonnathan Juarez 15377; Javier Jo 14343
  * @since 09/07/2016
  * @version 1.0
  */
