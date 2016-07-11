@@ -5,6 +5,9 @@
  * @version 1.0
  */
 public class RadioMain {
+    /**
+     * Main del radio.
+     */
     public static void main(String[] args) {
         RadioGUI radioGUI = new RadioGUI();
     }
