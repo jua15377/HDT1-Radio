@@ -17,7 +17,7 @@ public class RadioTest {
 
     @Test
     public void setEncendido() throws Exception {
-        radio.setEncendido(false);
+        radio.setEncendido(true);
         boolean estado = radio.getEncendido();
         assertEquals(false, estado);
         System.out.println("Test setEncendido");
@@ -26,7 +26,7 @@ public class RadioTest {
 
     @org.junit.Test
     public void setFrecuencia() throws Exception {
-        radio.setFrecuencia(true);
+        radio.setFrecuencia(false);
         boolean estado = radio.getFrecuencia();
         assertEquals(true, estado);
         System.out.println("Test setFrecuencia");
@@ -37,7 +37,7 @@ public class RadioTest {
     public void setEmisora() throws Exception {
         radio.setEmisora(94.9);
         double emisona = radio.getEmisora();
-        assertEquals(emisona, 94.9, 0.000003);
+        assertEquals(emisona, 90.9, 0.000003);
         System.out.println("Test setEmisora");
     }
 
@@ -45,7 +45,7 @@ public class RadioTest {
     public void saveEmisora() throws Exception {
         radio.saveEmisora(8,94.9);
         double emisora = radio.selectEmisora(8);
-        assertEquals(emisora, 94.9,0.000003);
+        assertEquals(emisora, 90.9,0.000003);
         System.out.println("Test saveEmisora");
     }
 }
