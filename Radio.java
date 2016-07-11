@@ -1,6 +1,8 @@
 /**
  * Esta clase es la base del objeto radio, el cual implementa la interfaz RadioInterface
- * @author Eric Mendoza 15002; Jonnathan Juarez 15377; Javier Jo 14343
+ * @author Eric Mendoza 15002;
+ * @author Jonnathan Juarez 15377;
+ * @author Javier Jo 14343
  * @since 09/07/2016
  * @version 1.0
  */
