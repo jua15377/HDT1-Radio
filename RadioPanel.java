@@ -7,15 +7,22 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
 /**
- * Esta clase contiene los siguientes componentes:
+ * Esta clase contiene los siguientes componentes para simular una radio:
+ *      JButtons: Utilizados para funciones de apagado/encendido, am/fm, guardar estaciones y aumentar/disminuir emisora actual.
+ *      JTextPane: Para mostrar la emisora que se escucha actualmente
+ *      Timer: Para guardar estaciones
  * @author Eric Mendoza 15002; Jonnathan Juarez 15377; Javier Jo 14343
  * @since 09/07/2016
  * @version 1.2
  */
 public class RadioPanel extends JPanel {
 
-    private JPanel radioPanel;
+    //Instanciacion de clase con interfaz implementada
+    //***********************************
     private Radio radio = new Radio();
+    //***********************************
+
+    private JPanel radioPanel;
     private JTextPane actualFrec;
     private JButton f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,fm, aumentarFrec, disminuirFrec;
 
@@ -26,7 +33,9 @@ public class RadioPanel extends JPanel {
     private Timer timerEstaciones;
     DecimalFormat aprox = new DecimalFormat("#.#"); //Para eliminar ceros inecesarios
 
-
+    /***
+     * Este metodo crea el panel donde se contienen todos los componentes
+     */
     public RadioPanel(){
         radioPanel = new JPanel();
         radioPanel.setBounds(50, 25, 594, 201);
@@ -208,6 +217,9 @@ public class RadioPanel extends JPanel {
         add(radioPanel);
     }
 
+    /**
+     * Clase interna que habilita/deshabilita los botones segun su estado
+     */
     public class EnciendeRadio implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -256,6 +268,9 @@ public class RadioPanel extends JPanel {
         }
     }
 
+    /**
+     * Clase interna que se utiliza para cambiar el tipo de frecuencia AM/FM.
+     */
     private class CambiaFrecuencia implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -276,6 +291,9 @@ public class RadioPanel extends JPanel {
         }
     }
 
+    /**
+     * Clase interna para aumentar el valor de la frecuencia de la emisora actual.
+     */
     private class AumentaEmisora implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -306,6 +324,9 @@ public class RadioPanel extends JPanel {
         }
     }
 
+    /**
+     * Clase interna para disminuir el valor de la frecuencia de la emisora actual.
+     */
     private class DisminuyeEmisora implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -337,6 +358,9 @@ public class RadioPanel extends JPanel {
 
     }
 
+    /**
+     * Clase interna que se utiliza para guardar una estacion de radio en alguno de los 12 botones
+     */
     private class EscuchaEmisoraGuardada implements ChangeListener {
         @Override
         public void stateChanged(ChangeEvent e) {
@@ -365,6 +389,9 @@ public class RadioPanel extends JPanel {
         }
     }
 
+    /**
+     * Clase interna que se utliza para saber cuanto tiempo se presiona alguno de los botones de guardado
+     */
     private class TimerListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -373,6 +400,9 @@ public class RadioPanel extends JPanel {
         }
     }
 
+    /**
+     * Clase interna que informa cual de los botones de guardado se presiono
+     */
     private class CambiaBotonActual implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {

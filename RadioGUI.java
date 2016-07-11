@@ -8,6 +8,9 @@ import java.awt.*;
  * @version 1.1
  */
 public class RadioGUI {
+    /**
+     * Contructor del GUI.
+     */
     public RadioGUI(){
         //Panel a utilizar
         RadioPanel radioPanel = new RadioPanel();
