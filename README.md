@@ -3,7 +3,7 @@
 # Autores:
 Eric Mendoza,
 Jonnathan Juarez,
-Javier Jo,
+Javier Jo
 
 # Sección
 30
