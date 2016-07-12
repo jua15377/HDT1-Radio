@@ -35,11 +35,22 @@ public class Radio implements RadioInterface{
     @Override
     public void saveEmisora(int btn, double emisora) {
         this.frecsGuardadas[btn-1] = emisora;
+        try{
+            this.frecsGuardadas[btn-1] = emisora;
+        } catch (ArrayIndexOutOfBoundsException e){
+            this.frecsGuardadas[btn] = emisora;
+        }
     }
 
     @Override
     public double selectEmisora(int btn) {
-        return this.frecsGuardadas[btn-1];
+        double emisora;
+        try{
+            emisora = this.frecsGuardadas[btn-1];
+        } catch (ArrayIndexOutOfBoundsException e){
+            emisora = this.frecsGuardadas[btn];
+        }
+        return emisora;
     }
 
     @Override

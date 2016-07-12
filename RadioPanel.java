@@ -11,6 +11,8 @@ import java.text.DecimalFormat;
  *      JButtons: Utilizados para funciones de apagado/encendido, am/fm, guardar estaciones y aumentar/disminuir emisora actual.
  *      JTextPane: Para mostrar la emisora que se escucha actualmente
  *      Timer: Para guardar estaciones
+ * En ella se crea un objeto Radio, el cual tiene implementada la interfaz RadioInterface
+ *
  * @author Eric Mendoza 15002; Jonnathan Juarez 15377; Javier Jo 14343
  * @since 09/07/2016
  * @version 1.2
@@ -19,7 +21,7 @@ public class RadioPanel extends JPanel {
 
     //Instanciacion de clase con interfaz implementada
     //***********************************
-    private Radio radio = new Radio();
+    private RadioInterface radio = new Radio();
     //***********************************
 
     private JPanel radioPanel;
