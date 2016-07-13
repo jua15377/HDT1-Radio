@@ -34,7 +34,6 @@ public class RadioCarro implements Radio{
 
     @Override
     public void saveEmisora(int btn, double emisora) {
-        this.frecsGuardadas[btn-1] = emisora;
         try{
             this.frecsGuardadas[btn-1] = emisora;
         } catch (ArrayIndexOutOfBoundsException e){
