@@ -1,70 +1,70 @@
 /**
- * Esta clase es la base del objeto radio, el cual implementa la interfaz RadioInterface
- * @author Eric Mendoza 15002; Jonnathan Juarez 15377; Javier Jo 14343
- * @since 09/07/2016
- * @version 1.0
+ * @author UVG Clase, seccion: 30
+ *
+ * Descripcion: Interfaz que describe el funcionamiento de una Radio
  */
-public class Radio implements RadioInterface{
-    //Atributos
-    private boolean encendido, frecuencia;
-    private double emisora;
-    private double[] frecsGuardadas = {87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9,87.9};
+public interface Radio {
 
-    //Metodos
-    public Radio(){
-        this.encendido = false;
-        this.frecuencia = true;
-        this.emisora = 87.9;
-    }
+    /**
+     Metodo de encendido
+     @param estado, define el estado de apagado/encendido
+     True -> encendido
+     False -> apagado
+     */
+    void setEncendido(boolean estado);
 
-    @Override
-    public void setEncendido(boolean estado) {
-        this.encendido = estado;
-    }
+    /**
+     Metodo de cambio de frecuencia
+     @param frecuencia, define el estado de AM/FM
+     True -> FM
+     False -> AM
+     */
 
-    @Override
-    public void setFrecuencia(boolean frecuencia) {
-        this.frecuencia = frecuencia;
-    }
+    void setFrecuencia(boolean frecuencia);
 
-    @Override
-    public void setEmisora(double emisora) {
-        this.emisora = emisora;
-    }
+    /**
+     Metodo de emisora
+     @param emisora, define la emisora que se esta "escuchando"
+     */
 
-    @Override
-    public void saveEmisora(int btn, double emisora) {
-        this.frecsGuardadas[btn-1] = emisora;
-        try{
-            this.frecsGuardadas[btn-1] = emisora;
-        } catch (ArrayIndexOutOfBoundsException e){
-            this.frecsGuardadas[btn] = emisora;
-        }
-    }
+    void setEmisora(double emisora);
 
-    @Override
-    public double selectEmisora(int btn) {
-        double emisora;
-        try{
-            emisora = this.frecsGuardadas[btn-1];
-        } catch (ArrayIndexOutOfBoundsException e){
-            emisora = this.frecsGuardadas[btn];
-        }
-        return emisora;
-    }
+    /**
+     Metodo de guardar emisora en un boton
+     @param btn, contiene el ID del boton
+     */
 
-    @Override
-    public boolean getEncendido() {
-        return this.encendido;
-    }
+    void saveEmisora(int btn, double emisora);
 
-    @Override
-    public boolean getFrecuencia() {
-        return this.frecuencia;
-    }
+    /**
+     Metodo de seleccionar emisora
+     @param btn, contiene el ID del boton
+     */
 
-    @Override
-    public double getEmisora() {
-        return this.emisora;
-    }
+    double selectEmisora(int btn);
+
+    /**
+     Metodo para obtener el estado actual de la radio
+     @ return Estado de la radio
+     True -> Encendido
+     False -> Apagado
+     */
+
+    boolean getEncendido();
+
+    /**
+     Metodo para obtener la frecuencia actual
+     @return frecuencia actual
+     True -> FM
+     False -> AM
+     */
+
+    boolean getFrecuencia();
+
+    /**
+     Metodo para obtener la emisora
+     @return emisora que se esta "escuchando"
+     */
+
+    double getEmisora();
 }

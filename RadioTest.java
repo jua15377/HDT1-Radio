@@ -13,7 +13,7 @@ import org.junit.Test;
 
 public class RadioTest {
 
-    private Radio radio = new Radio();
+    private Radio radio = new RadioCarro();
 
     @Test
     public void setEncendido() throws Exception {

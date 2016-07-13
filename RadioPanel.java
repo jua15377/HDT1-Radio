@@ -21,7 +21,7 @@ public class RadioPanel extends JPanel {
 
     //Instanciacion de clase con interfaz implementada
     //***********************************
-    private RadioInterface radio = new Radio();
+    private Radio radio = new RadioCarro();
     //***********************************
 
     private JPanel radioPanel;
